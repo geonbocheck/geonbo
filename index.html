@@ -149,9 +149,9 @@
       margin: 20px 0;
     }
     .result-emoji {
-      font-size: 60px;
-      margin-bottom: 10px;
+      display: none;
     }
+
     .result-title {
       font-size: 24px;
       font-weight: 800;
@@ -291,7 +291,8 @@
       <div class="input-row">
         <input type="number" id="pension-amount" placeholder="예: 150"
           oninput="inputData.pension_monthly = this.value * 10000">
-        <span>만원</span>
+  <span style="display:none;">만원</span>
+
       </div>
     </div>
     <button class="btn-main" style="margin-top:30px;" onclick="showScreen('screen-step3')">다음으로</button>
@@ -369,7 +370,7 @@
     <h2 class="step-title">재산세 과세표준을 입력해 주세요</h2>
     <p class="step-desc">토지·건물·주택 합계 기준입니다<br>시세가 아닌 재산세 과세표준입니다<br>(위택스 또는 재산세 고지서에서 확인)</p>
 
-    <div class="input-wrap">
+       <div class="input-wrap">
       <label>재산세 과세표준 합계</label>
       <div class="input-row">
         <input type="number" id="assets" placeholder="예: 30000"
@@ -377,9 +378,18 @@
         <span>만원</span>
       </div>
     </div>
-    <p style="font-size:14px;color:#999;margin-top:8px;">재산이 없으면 0을 입력해 주세요</p>
+<div id="no-asset-options" style="margin-top:12px;width:calc(100% - 40px);">
+  <div class="option-card" onclick="selectNoAsset(this)" style="width:100%;box-sizing:border-box;">재산세 없음</div>
+</div>
 
-    <button class="btn-main" style="margin-top:30px;" onclick="calcResult()">결과 확인하기</button>
+
+
+
+
+
+
+<button class="btn-main" style="margin-top:30px;width:calc(100% - 40px);" onclick="calcResult()">결과 확인하기</button>
+
   </div>
 
   <!-- 화면 7: 결과 -->
@@ -420,7 +430,8 @@
   var inputData = {};
  var PRIVACY_URL = 'https://geonbocheck.github.io/geonbo/privacy.html';
   var STORE_PDF_URL = 'https://smartstore.naver.com/jikguit/products/13628562404'; // 스마트스토어 PDF 상품 링크
-  https://smartstore.naver.com/jikguit/products/13628577826 // 스마트스토어 상담 상품 링크
+  var STORE_CONSULT_URL = 'https://smartstore.naver.com/jikguit/products/13628577826'; // 스마트스토어 상담 상품 링크
+
   var SCRIPT_URL = ''; // Apps Script 웹훅 URL (나중에 입력)
 
   // 기준값 (구글 시트 연동 전 기본값)
@@ -463,7 +474,11 @@
     }
   }
 
-  function calcResult() {
+   function calcResult() {
+    if (!inputData.assets && inputData.assets !== 0) {
+      inputData.assets = Number(document.getElementById('assets').value) * 10000;
+    }
+
     // localStorage 저장
     inputData.savedAt = new Date().toISOString().slice(0,10);
     localStorage.setItem('lastInput', JSON.stringify(inputData));
@@ -507,7 +522,16 @@
     showResult(code);
   }
 
-  function showResult(code) {
+    function showResult(code) {
+    var ico = {
+      list:    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#546e7a" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>',
+      cut:     '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#546e7a" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+      warn:    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#546e7a" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="1" fill="#546e7a"/></svg>',
+      money:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#546e7a" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>',
+      alert:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="#999"/></svg>',
+      check:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><circle cx="12" cy="12" r="9"/><polyline points="9 12 11 14 15 10"/></svg>'
+    };
+
     var messages = {
       SAFE: {
         emoji: '🟢',
@@ -554,18 +578,79 @@
     };
 
     var m = messages[code];
-    var totalWon = inputData.total_income ? Math.round(inputData.total_income / 10000) : 0;
 
-    var html = '<div class="result-box">' +
-      '<div class="result-emoji">' + m.emoji + '</div>' +
-      '<div class="result-title">' + m.title + '</div>';
+    var pensionY       = inputData.pension_monthly ? Math.round(Number(inputData.pension_monthly) * 12 / 10000) : 0;
+    var financial      = inputData.financial ? Number(inputData.financial) : 0;
+    var financialY     = Math.round(financial / 10000);
+    var financialExcluded = financial <= CONFIG.financial_exclude;
+    var laborY         = inputData.labor  ? Math.round(Number(inputData.labor)  / 10000) : 0;
+    var otherY         = inputData.other  ? Math.round(Number(inputData.other)  / 10000) : 0;
+    var totalWon       = inputData.total_income ? Math.round(inputData.total_income / 10000) : 0;
+    var limitWon       = Math.round(CONFIG.income_limit / 10000);
+    var overWon        = totalWon - limitWon;
 
-    if (totalWon > 0) {
-      html += '<div class="result-income">연간 합산 소득: <strong>' + totalWon.toLocaleString() + '만원</strong> (기준: 2,000만원)</div>';
+    var estPremium = '';
+    if (code === 'DROP_INCOME' && inputData.total_income) {
+      var monthly  = Math.round(inputData.total_income * 0.0719 / 12 / 100) * 100;
+      var longcare = Math.round(monthly * 0.9182 / 100) * 100;
+      estPremium   = (monthly + longcare).toLocaleString();
     }
 
-    html += '<div class="result-reason">⚠️ ' + m.reason + '</div>' +
-      '<div class="result-guide">💡 ' + m.guide + '</div>' +
+    var imgMap = {
+      SAFE: 'safe.png',
+      WARN: 'warn.png',
+      DROP_INCOME: 'drop.png',
+      DROP_RENT: 'drop.png',
+      DROP_BIZ: 'drop.png',
+      DROP_ASSET: 'drop.png',
+      WARN_ASSET: 'warn_asset.png'
+    };
+
+    var html = '<div class="result-box">' +
+      '<img src="' + imgMap[code] + '" style="width:160px;height:160px;object-fit:cover;border-radius:16px;margin-bottom:10px;">' +
+      '<div class="result-title">' + m.title + '</div>';
+
+
+    // 소득 항목별 내역
+    if (totalWon > 0 || pensionY > 0 || laborY > 0 || otherY > 0 || financialY > 0) {
+      html += '<div style="background:#f0f4f8;border-radius:10px;padding:16px;margin:16px 0;text-align:left;font-size:15px;line-height:2;border-left:4px solid #90a4ae;">';
+      html += '<strong style="color:#546e7a;">' + ico.list + '소득 항목별 내역</strong><br>';
+      if (pensionY > 0)   html += '공적연금&nbsp;&nbsp;<strong>' + pensionY.toLocaleString() + '만원</strong>/년<br>';
+      if (financialY > 0) html += '금융소득&nbsp;&nbsp;<strong>' + financialY.toLocaleString() + '만원</strong>' + (financialExcluded ? '&nbsp;<span style="color:#999;font-size:13px;">(1,000만원 이하 — 합산 제외)</span>' : '') + '<br>';
+      if (laborY > 0)     html += '근로소득&nbsp;&nbsp;<strong>' + laborY.toLocaleString() + '만원</strong>/년<br>';
+      if (otherY > 0)     html += '기타소득&nbsp;&nbsp;<strong>' + otherY.toLocaleString() + '만원</strong>/년<br>';
+      html += '<hr style="border:none;border-top:1px solid #cfd8dc;margin:6px 0;">';
+      html += '합산 소득&nbsp;&nbsp;<strong style="color:' + (code.startsWith('DROP') ? '#c0392b' : '#1a73e8') + ';">' + totalWon.toLocaleString() + '만원</strong>&nbsp;/&nbsp;기준 2,000만원<br>';
+      html += '</div>';
+    }
+
+    // 얼마 줄이면 안전한지
+    if (code === 'DROP_INCOME' && overWon > 0) {
+      html += '<div style="background:#f5f5f5;border-radius:10px;padding:14px;margin:10px 0;text-align:left;font-size:15px;line-height:1.8;border-left:4px solid #78909c;">';
+      html += ico.cut + '<strong>' + overWon.toLocaleString() + '만원</strong>을 줄이면 자격이 유지될 수 있습니다.<br>';
+      html += '<span style="color:#999;font-size:13px;">금융소득 조정, ISA 계좌 전환, 사적연금 이전 등</span>';
+      html += '</div>';
+    }
+
+    // WARN 여유 표시
+    if (code === 'WARN' && overWon < 0) {
+      var safeMargin = Math.abs(overWon);
+      html += '<div style="background:#f5f5f5;border-radius:10px;padding:14px;margin:10px 0;text-align:left;font-size:15px;line-height:1.8;border-left:4px solid #78909c;">';
+      html += ico.warn + '기준까지 여유: <strong>' + safeMargin.toLocaleString() + '만원</strong><br>';
+      html += '<span style="color:#999;font-size:13px;">소득이 조금만 늘어도 탈락할 수 있습니다. 지금 관리가 필요합니다.</span>';
+      html += '</div>';
+    }
+
+    // 예상 건보료
+    if (estPremium) {
+      html += '<div style="background:#f5f5f5;border-radius:10px;padding:14px;margin:10px 0;text-align:left;font-size:15px;line-height:1.8;border-left:4px solid #b0bec5;">';
+      html += ico.money + '탈락 시 예상 월 건보료: <strong style="color:#c0392b;">' + estPremium + '원</strong><br>';
+      html += '<span style="color:#999;font-size:13px;">지역가입자 전환 기준 추산 (건강보험료 + 장기요양보험료)</span>';
+      html += '</div>';
+    }
+
+    html += '<div class="result-reason" style="margin-top:10px;">' + ico.alert + m.reason + '</div>' +
+      '<div class="result-guide" style="margin-top:10px;">' + ico.check + m.guide + '</div>' +
       '</div>';
 
     html += '<button class="btn-main" onclick="window.open(\'' + STORE_CONSULT_URL + '\',\'_blank\')">전문가 상담 신청 →</button>';
@@ -574,6 +659,18 @@
     document.getElementById('result-content').innerHTML = html;
     showScreen('screen-result');
   }
+  
+    function selectNoAsset(el) {
+    document.getElementById('no-asset-options').querySelectorAll('.option-card').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    el.classList.add('selected');
+    document.getElementById('assets').value = '0';
+    inputData.assets = 0;
+    inputData.has_asset_set = true;
+  }
+
+
 
   function resetAll() {
     inputData = {};
