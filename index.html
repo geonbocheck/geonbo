@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>건보지킴이 - 피부양자 탈락 무료 계산기</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Apple SD Gothic Neo', '맑은 고딕', sans-serif;
+      font-size: 18px;
+      background: #f5f7fa;
+      color: #222;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* 홈 화면 */
+    .home-header {
+      text-align: center;
+      padding: 40px 0 30px;
+    }
+    .home-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1a73e8;
+      margin-bottom: 10px;
+    }
+    .home-header p {
+      font-size: 18px;
+      color: #444;
+      line-height: 1.6;
+    }
+    .badge-list {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .badge-item {
+      padding: 10px 0;
+      font-size: 17px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .badge-item:last-child { border-bottom: none; }
+    .btn-main {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .btn-main:active { background: #1558b0; }
+    .btn-main:disabled { background: #aaa; cursor: default; }
+    .privacy-link {
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      margin-top: 10px;
+    }
+    .privacy-link a { color: #888; }
+    .option-card {
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .option-card.selected {
+      border-color: #1a73e8;
+      background: #e8f0fe;
+      font-weight: 700;
+    }
+    .progress-bar {
+      background: #e8f0fe;
+      border-radius: 8px;
+      height: 8px;
+      margin-bottom: 24px;
+    }
+    .progress-fill {
+      background: #1a73e8;
+      border-radius: 8px;
+      height: 8px;
+      transition: width 0.3s;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 20px 0 10px;
+      display: block;
+    }
+    .step-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+    .input-wrap {
+      margin-top: 20px;
+    }
+    .input-wrap label {
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .input-row {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .input-row input {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+    .input-row span {
+      margin-left: 8px;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+    .result-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 20px 0;
+    }
+    .result-emoji {
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+    .result-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .result-income {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    .result-reason {
+      background: #fff8e1;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 16px;
+      text-align: left;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .result-guide {
+      background: #e8f5e9;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 16px;
+      text-align: left;
+      line-height: 1.6;
+    }
+    .btn-secondary {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: #fff;
+      color: #1a73e8;
+      font-size: 18px;
+      font-weight: 700;
+      border: 2px solid #1a73e8;
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: center;
+      margin: 10px 0;
+    }
+    .notice {
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+    .consult-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 20px 0;
+    }
+    .consult-box input {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+    }
+    .consult-box label {
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+    .checkbox-wrap input {
+      width: auto;
+      margin-right: 8px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 화면 1: 홈 -->
+  <div id="screen-home" class="screen active">
+    <div class="home-header">
+      <h1>🏥 건보지킴이</h1>
+      <p>피부양자 자격 유지 여부<br>지금 바로 확인하세요</p>
+    </div>
+    <div class="badge-list">
+      <div class="badge-item">✅ 입력 정보 서버에 저장되지 않습니다</div>
+      <div class="badge-item">✅ 완전 무료 계산기입니다</div>
+      <div class="badge-item">✅ 1분이면 결과를 확인할 수 있습니다</div>
+    </div>
+    <button class="btn-main" onclick="showScreen('screen-step1')">
+      지금 확인하기
+    </button>
+    <div class="privacy-link">
+      <a href="#" target="_blank">개인정보처리방침</a>
+    </div>
+  </div>
+
+  <!-- 화면 2: Step 1 - 관계 선택 -->
+  <div id="screen-step1" class="screen">
+    <button class="back-btn" onclick="showScreen('screen-home')">← 뒤로</button>
+    <div class="progress-bar"><div class="progress-fill" style="width:20%;"></div></div>
+    <h2 class="step-title">누구의 피부양자인가요?</h2>
+    <p class="step-desc">직장가입자와의 관계를 선택해 주세요</p>
+    <div id="relation-options">
+      <div class="option-card" onclick="selectOption('relation','배우자',this)">배우자</div>
+      <div class="option-card" onclick="selectOption('relation','부모',this)">부모 (직계존속)</div>
+      <div class="option-card" onclick="selectOption('relation','자녀',this)">자녀 (직계비속)</div>
+      <div class="option-card" onclick="selectOption('relation','형제자매',this)">형제자매</div>
+    </div>
+    <button class="btn-main" id="btn-step1" style="opacity:0.4;" disabled
+      onclick="showScreen('screen-step2')">다음으로</button>
+  </div>
+
+  <!-- 화면 3: Step 2 - 공적연금 -->
+  <div id="screen-step2" class="screen">
+    <button class="back-btn" onclick="showScreen('screen-step1')">← 뒤로</button>
+    <div class="progress-bar"><div class="progress-fill" style="width:40%;"></div></div>
+    <h2 class="step-title">공적연금을 받고 계신가요?</h2>
+    <p class="step-desc">사적연금(연금저축, IRP)은 해당 없습니다</p>
+    <div id="pension-options">
+      <div class="option-card" onclick="selectOption('pension','국민연금',this)">국민연금</div>
+      <div class="option-card" onclick="selectOption('pension','공무원연금',this)">공무원연금</div>
+      <div class="option-card" onclick="selectOption('pension','사학연금',this)">사학연금</div>
+      <div class="option-card" onclick="selectOption('pension','군인연금',this)">군인연금</div>
+      <div class="option-card" onclick="selectOption('pension','없음',this)">받지 않습니다</div>
+    </div>
+    <div id="pension-amount-wrap" class="input-wrap" style="display:none;">
+      <label>월 수령액</label>
+      <div class="input-row">
+        <input type="number" id="pension-amount" placeholder="예: 150"
+          oninput="inputData.pension_monthly = this.value * 10000">
+        <span>만원</span>
+      </div>
+    </div>
+    <button class="btn-main" style="margin-top:30px;" onclick="showScreen('screen-step3')">다음으로</button>
+  </div>
+
+  <!-- 화면 4: Step 3 - 금융/근로/기타소득 -->
+  <div id="screen-step3" class="screen">
+    <button class="back-btn" onclick="showScreen('screen-step2')">← 뒤로</button>
+    <div class="progress-bar"><div class="progress-fill" style="width:60%;"></div></div>
+    <h2 class="step-title">기타 소득을 입력해 주세요</h2>
+    <p class="step-desc">없으면 0으로 두고 다음으로 넘어가세요</p>
+
+    <div class="input-wrap">
+      <label>금융소득 (이자+배당) 연간</label>
+      <div class="input-row">
+        <input type="number" id="financial" placeholder="0"
+          oninput="inputData.financial = this.value * 10000">
+        <span>만원</span>
+      </div>
+    </div>
+    <div class="input-wrap" style="margin-top:16px;">
+      <label>근로소득 연간</label>
+      <div class="input-row">
+        <input type="number" id="labor" placeholder="0"
+          oninput="inputData.labor = this.value * 10000">
+        <span>만원</span>
+      </div>
+    </div>
+    <div class="input-wrap" style="margin-top:16px;">
+      <label>기타소득 연간 (강의료, 원고료 등)</label>
+      <div class="input-row">
+        <input type="number" id="other" placeholder="0"
+          oninput="inputData.other = this.value * 10000">
+        <span>만원</span>
+      </div>
+    </div>
+    <button class="btn-main" style="margin-top:30px;" onclick="showScreen('screen-step4')">다음으로</button>
+  </div>
+
+  <!-- 화면 5: Step 4 - 사업자/임대 -->
+  <div id="screen-step4" class="screen">
+    <button class="back-btn" onclick="showScreen('screen-step3')">← 뒤로</button>
+    <div class="progress-bar"><div class="progress-fill" style="width:80%;"></div></div>
+    <h2 class="step-title">사업자 등록과 임대소득이 있나요?</h2>
+    <p class="step-desc">해당 항목을 선택해 주세요</p>
+
+    <p style="font-weight:700;margin-bottom:10px;">사업자 등록 여부</p>
+    <div id="biz-options">
+      <div class="option-card" onclick="selectOption('has_biz','예',this)">사업자 등록 있음</div>
+      <div class="option-card" onclick="selectOption('has_biz','아니오',this)">사업자 등록 없음</div>
+    </div>
+
+    <div id="biz-income-wrap" class="input-wrap" style="display:none;margin-top:8px;">
+      <label>사업소득 연간</label>
+      <div class="input-row">
+        <input type="number" id="biz-income" placeholder="0"
+          oninput="inputData.biz_income = this.value * 10000">
+        <span>만원</span>
+      </div>
+    </div>
+
+    <p style="font-weight:700;margin-top:24px;margin-bottom:10px;">주택 임대소득 여부</p>
+    <div id="rent-options">
+      <div class="option-card" onclick="selectOption('has_rent','예',this)">임대소득 있음</div>
+      <div class="option-card" onclick="selectOption('has_rent','아니오',this)">임대소득 없음</div>
+    </div>
+
+    <button class="btn-main" style="margin-top:30px;" onclick="showScreen('screen-step5')">다음으로</button>
+  </div>
+
+  <!-- 화면 6: Step 5 - 재산 -->
+  <div id="screen-step5" class="screen">
+    <button class="back-btn" onclick="showScreen('screen-step4')">← 뒤로</button>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div>
+    <h2 class="step-title">재산세 과세표준을 입력해 주세요</h2>
+    <p class="step-desc">토지·건물·주택 합계 기준입니다<br>시세가 아닌 재산세 과세표준입니다<br>(위택스 또는 재산세 고지서에서 확인)</p>
+
+    <div class="input-wrap">
+      <label>재산세 과세표준 합계</label>
+      <div class="input-row">
+        <input type="number" id="assets" placeholder="예: 30000"
+          oninput="inputData.assets = this.value * 10000">
+        <span>만원</span>
+      </div>
+    </div>
+    <p style="font-size:14px;color:#999;margin-top:8px;">재산이 없으면 0을 입력해 주세요</p>
+
+    <button class="btn-main" style="margin-top:30px;" onclick="calcResult()">결과 확인하기</button>
+  </div>
+
+  <!-- 화면 7: 결과 -->
+  <div id="screen-result" class="screen">
+    <div id="result-content"></div>
+    <button class="btn-secondary" onclick="resetAll()">다시 계산하기</button>
+    <div class="notice">
+      이 계산은 참고용입니다. 정확한 판정은<br>
+      국민건강보험공단(1577-1000)에 문의하세요.
+    </div>
+  </div>
+
+  <!-- 화면 8: 상담 신청 -->
+  <div id="screen-consult" class="screen">
+    <button class="back-btn" onclick="showScreen('screen-result')">← 뒤로</button>
+    <h2 class="step-title" style="margin-top:10px;">전문가 상담 신청</h2>
+    <p class="step-desc">입력하신 정보는 상담 연결 목적으로만 사용됩니다</p>
+    <div class="consult-box">
+      <label>이름</label>
+      <input type="text" id="consult-name" placeholder="홍길동">
+      <label>연락처</label>
+      <input type="tel" id="consult-phone" placeholder="010-0000-0000">
+      <div class="checkbox-wrap">
+        <input type="checkbox" id="privacy-agree">
+        <label for="privacy-agree">
+          <a href="#" target="_blank" style="color:#1a73e8;">개인정보처리방침</a>에 동의합니다
+        </label>
+      </div>
+      <button class="btn-main" style="margin:0;" onclick="submitConsult()">신청하기</button>
+    </div>
+    <div class="notice">신청 후 1~2 영업일 내 연락드립니다</div>
+  </div>
+
+</div>
+
+<script>
+  var inputData = {};
+  var PRIVACY_URL = '#'; // Notion 링크로 교체 예정
+  var STORE_PDF_URL = '#'; // 스마트스토어 PDF 상품 링크
+  var STORE_CONSULT_URL = '#'; // 스마트스토어 상담 상품 링크
+  var SCRIPT_URL = ''; // Apps Script 웹훅 URL (나중에 입력)
+
+  // 기준값 (구글 시트 연동 전 기본값)
+  var CONFIG = {
+    income_limit: 20000000,
+    asset_limit_1: 540000000,
+    asset_limit_2: 900000000,
+    income_limit_cond: 10000000,
+    financial_exclude: 10000000
+  };
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function selectOption(key, value, el) {
+    var parent = el.parentElement;
+    parent.querySelectorAll('.option-card').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    el.classList.add('selected');
+    inputData[key] = value;
+
+    if (key === 'pension') {
+      var wrap = document.getElementById('pension-amount-wrap');
+      wrap.style.display = value === '없음' ? 'none' : 'block';
+    }
+    if (key === 'has_biz') {
+      var bizWrap = document.getElementById('biz-income-wrap');
+      bizWrap.style.display = value === '예' ? 'block' : 'none';
+    }
+    if (key === 'relation') {
+      var btn = document.getElementById('btn-step1');
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  }
+
+  function calcResult() {
+    // localStorage 저장
+    inputData.savedAt = new Date().toISOString().slice(0,10);
+    localStorage.setItem('lastInput', JSON.stringify(inputData));
+
+    var code = '';
+    var reason = '';
+    var guide = '';
+
+    // STEP 1: 즉시 탈락 여부
+    if (inputData.has_rent === '예') {
+      code = 'DROP_RENT';
+    } else if (inputData.has_biz === '예' && inputData.biz_income > 0) {
+      code = 'DROP_BIZ';
+    } else if (inputData.assets > CONFIG.asset_limit_2) {
+      code = 'DROP_ASSET';
+    } else {
+      // STEP 2: 소득 합산
+      var pension = inputData.pension_monthly ? Number(inputData.pension_monthly) * 12 : 0;
+      var financial = inputData.financial ? Number(inputData.financial) : 0;
+      var labor = inputData.labor ? Number(inputData.labor) : 0;
+      var other = inputData.other ? Number(inputData.other) : 0;
+
+      // 금융소득 1,000만 이하 제외
+      if (financial <= CONFIG.financial_exclude) financial = 0;
+
+      var total = pension + financial + labor + other;
+      inputData.total_income = total;
+
+      // STEP 3: 재산 조건부
+      if (inputData.assets > CONFIG.asset_limit_1 && total > CONFIG.income_limit_cond) {
+        code = 'WARN_ASSET';
+      } else if (total > CONFIG.income_limit) {
+        code = 'DROP_INCOME';
+      } else if (total > CONFIG.income_limit * 0.9) {
+        code = 'WARN';
+      } else {
+        code = 'SAFE';
+      }
+    }
+
+    showResult(code);
+  }
+
+  function showResult(code) {
+    var messages = {
+      SAFE: {
+        emoji: '🟢',
+        title: '현재 피부양자 자격이 유지됩니다',
+        reason: '입력하신 소득과 재산을 기준으로 현재 피부양자 자격이 유지되는 것으로 판단됩니다.',
+        guide: '매년 11월 재판정 시점에 다시 확인해보세요.'
+      },
+      WARN: {
+        emoji: '🟡',
+        title: '소득이 기준선 근처입니다',
+        reason: '현재 소득 합계가 기준인 연 2,000만 원에 근접해 있습니다.',
+        guide: 'ISA 계좌 활용, 사적연금 전환 여부를 전문가와 확인해보시는 것을 권장합니다.'
+      },
+      DROP_INCOME: {
+        emoji: '🔴',
+        title: '연간 합산 소득이 기준을 초과합니다',
+        reason: '연간 합산 소득이 2,000만 원을 초과하여 피부양자 자격을 유지하기 어렵습니다.',
+        guide: '퇴직 후 2개월 이내 임의계속가입 신청을 검토해보세요. 최대 36개월간 직장가입자 수준의 보험료를 유지할 수 있습니다.'
+      },
+      DROP_RENT: {
+        emoji: '🔴',
+        title: '주택 임대소득 보유 시 자격 상실',
+        reason: '주택 임대소득이 있는 경우 소득 금액과 관계없이 피부양자 자격이 상실됩니다.',
+        guide: '임의계속가입 또는 지역가입자 전환 후 건보료 조정 신청을 검토해보세요.'
+      },
+      DROP_BIZ: {
+        emoji: '🔴',
+        title: '사업자 등록 시 즉시 자격 상실',
+        reason: '사업자 등록이 있는 경우 사업소득이 발생하면 자격이 상실됩니다.',
+        guide: '국민건강보험공단(1577-1000)에 문의하시는 것을 권장합니다.'
+      },
+      DROP_ASSET: {
+        emoji: '🔴',
+        title: '재산이 기준을 초과합니다',
+        reason: '재산세 과세표준 합계가 9억 원을 초과하여 소득과 관계없이 자격이 상실됩니다.',
+        guide: '재산 구성 조정에 대해 전문가 확인을 권장합니다.'
+      },
+      WARN_ASSET: {
+        emoji: '🟡',
+        title: '재산 조건부 유지 구간입니다',
+        reason: '재산세 과세표준이 5억 4천만 원 초과~9억 원 이하 구간입니다.',
+        guide: '이 경우 연 소득이 1,000만 원 이하여야 자격이 유지됩니다.'
+      }
+    };
+
+    var m = messages[code];
+    var totalWon = inputData.total_income ? Math.round(inputData.total_income / 10000) : 0;
+
+    var html = '<div class="result-box">' +
+      '<div class="result-emoji">' + m.emoji + '</div>' +
+      '<div class="result-title">' + m.title + '</div>';
+
+    if (totalWon > 0) {
+      html += '<div class="result-income">연간 합산 소득: <strong>' + totalWon.toLocaleString() + '만원</strong> (기준: 2,000만원)</div>';
+    }
+
+    html += '<div class="result-reason">⚠️ ' + m.reason + '</div>' +
+      '<div class="result-guide">💡 ' + m.guide + '</div>' +
+      '</div>';
+
+    html += '<button class="btn-main" onclick="window.open(\'' + STORE_CONSULT_URL + '\',\'_blank\')">전문가 상담 신청 →</button>';
+    html += '<button class="btn-secondary" onclick="window.open(\'' + STORE_PDF_URL + '\',\'_blank\')">가이드 PDF 구매 →</button>';
+
+    document.getElementById('result-content').innerHTML = html;
+    showScreen('screen-result');
+  }
+
+  function resetAll() {
+    inputData = {};
+    document.querySelectorAll('.option-card').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    document.querySelectorAll('input[type=number], input[type=text], input[type=tel]').forEach(function(i) {
+      i.value = '';
+    });
+    document.getElementById('btn-step1').disabled = true;
+    document.getElementById('btn-step1').style.opacity = '0.4';
+    document.getElementById('pension-amount-wrap').style.display = 'none';
+    document.getElementById('biz-income-wrap').style.display = 'none';
+    showScreen('screen-home');
+  }
+
+  function submitConsult() {
+    var name = document.getElementById('consult-name').value;
+    var phone = document.getElementById('consult-phone').value;
+    var agree = document.getElementById('privacy-agree').checked;
+
+    if (!name || !phone) {
+      alert('이름과 연락처를 입력해 주세요.');
+      return;
+    }
+    if (!agree) {
+      alert('개인정보처리방침에 동의해 주세요.');
+      return;
+    }
+
+    alert('신청이 완료되었습니다.\n1~2 영업일 내 연락드리겠습니다.');
+    showScreen('screen-result');
+  }
+
+  // 이전 입력값 불러오기
+  var saved = localStorage.getItem('lastInput');
+  if (saved) { inputData = JSON.parse(saved); }
+</script>
+</body>
+</html>
