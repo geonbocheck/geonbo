@@ -123,22 +123,25 @@
       font-size: 17px;
       font-weight: 600;
     }
-    .input-row {
+      .input-row {
       display: flex;
       align-items: center;
       margin-top: 8px;
     }
     .input-row input {
-      width: 100%;
+      flex: 1;
       padding: 14px;
       font-size: 18px;
       border: 2px solid #ddd;
       border-radius: 8px;
+      min-width: 0;
     }
     .input-row span {
+      width: 40px;
+      min-width: 40px;
+      text-align: right;
       margin-left: 8px;
       font-size: 18px;
-      white-space: nowrap;
     }
     .result-box {
       background: #fff;
@@ -302,36 +305,40 @@
 
     <div class="input-wrap">
       <label>금융소득 (이자+배당) 연간</label>
-      <input type="number" id="financial" placeholder="0"
-        oninput="inputData.financial = this.value * 10000"
-        style="width:100%;padding:14px;font-size:18px;border:2px solid #ddd;border-radius:8px;margin-top:8px;">
-      <div style="text-align:right;font-size:15px;color:#888;margin-top:4px;">만원</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+        <input type="number" id="financial" placeholder="0"
+          oninput="inputData.financial = this.value * 10000"
+          style="flex:1;padding:14px;font-size:18px;border:2px solid #ddd;border-radius:8px;min-width:0;">
+        <span style="font-size:16px;color:#444;flex-shrink:0;">만원</span>
+      </div>
     </div>
+
     <div class="input-wrap" style="margin-top:16px;">
       <label>근로소득 연간</label>
-      <input type="number" id="labor" placeholder="0"
-        oninput="inputData.labor = this.value * 10000"
-        style="width:100%;padding:14px;font-size:18px;border:2px solid #ddd;border-radius:8px;margin-top:8px;">
-      <div style="text-align:right;font-size:15px;color:#888;margin-top:4px;">만원</div>
-    </div>
-    <div class="input-wrap" style="margin-top:16px;">
-      <label>기타소득 연간 (강의료, 원고료 등)</label>
-      <input type="number" id="other" placeholder="0"
-        oninput="inputData.other = this.value * 10000"
-        style="width:100%;padding:14px;font-size:18px;border:2px solid #ddd;border-radius:8px;margin-top:8px;">
-      <div style="text-align:right;font-size:15px;color:#888;margin-top:4px;">만원</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+        <input type="number" id="labor" placeholder="0"
+          oninput="inputData.labor = this.value * 10000"
+          style="flex:1;padding:14px;font-size:18px;border:2px solid #ddd;border-radius:8px;min-width:0;">
+        <span style="font-size:16px;color:#444;flex-shrink:0;">만원</span>
+      </div>
     </div>
 
     <div class="input-wrap" style="margin-top:16px;">
       <label>기타소득 연간 (강의료, 원고료 등)</label>
-      <div class="input-row">
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
         <input type="number" id="other" placeholder="0"
-          oninput="inputData.other = this.value * 10000">
-        <span>만원</span>
+          oninput="inputData.other = this.value * 10000"
+          style="flex:1;padding:14px;font-size:18px;border:2px solid #ddd;border-radius:8px;min-width:0;">
+        <span style="font-size:16px;color:#444;flex-shrink:0;">만원</span>
       </div>
     </div>
-    <button class="btn-main" style="margin-top:30px;" onclick="showScreen('screen-step4')">다음으로</button>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-top:30px;">
+      <button class="btn-main" style="flex:1;margin:0;" onclick="showScreen('screen-step4')">다음으로</button>
+      <span style="font-size:16px;color:transparent;flex-shrink:0;">만원</span>
+    </div>
   </div>
+
 
   <!-- 화면 5: Step 4 - 사업자/임대 -->
   <div id="screen-step4" class="screen">
