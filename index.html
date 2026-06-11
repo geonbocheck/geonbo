@@ -246,9 +246,36 @@
       <img src="free.png" style="width:100%;max-width:440px;border-radius:16px;margin-bottom:20px;">
     </div>
 
+    <div style="background:#222;border-radius:14px;padding:20px;margin:16px 0;border:1px solid #444;text-align:center;">
+      <p style="font-size:15px;color:#eee;line-height:1.9;margin:0 0 16px 0;">
+        무료 서비스를 유지할 수 있는 건 여러분 덕분입니다 ❤️<br>
+        아래 링크를 통해 쇼핑하시면<br>
+        <strong>추가 비용 없이</strong> 운영에 힘이 됩니다.
+      </p>
+      <a href="https://link.coupang.com/a/euybU7VMWq" target="_blank"
+        style="display:block;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:12px;margin-bottom:10px;text-decoration:none;color:#2e7d32;font-size:15px;font-weight:600;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        쿠팡에서 쇼핑하기
+      </a>
+      <a href="https://naver.me/56XCYmzm" target="_blank"
+        style="display:block;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:12px;margin-bottom:10px;text-decoration:none;color:#2e7d32;font-size:15px;font-weight:600;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        네이버쇼핑에서 쇼핑하기
+      </a>
+      <a href="https://s.click.aliexpress.com/e/_DCXE6EZ" target="_blank"
+        style="display:block;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:12px;margin-bottom:10px;text-decoration:none;color:#2e7d32;font-size:15px;font-weight:600;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        알리익스프레스에서 쇼핑하기
+      </a>
+      <p style="font-size:11px;color:#aaa;margin:10px 0 0 0;line-height:1.7;">
+        이 링크는 파트너스 활동의 일환으로,<br>이에 따른 일정액의 수수료를 제공받습니다.
+      </p>
+    </div>
+
     <button class="btn-main" onclick="showScreen('screen-step1')">
       지금 확인하기
     </button>
+
     <div class="privacy-link">
      <a href="https://geonbocheck.github.io/geonbo/privacy.html" target="_blank">개인정보처리방침</a>
 
@@ -403,7 +430,8 @@
   <!-- 화면 7: 결과 -->
   <div id="screen-result" class="screen">
     <div id="result-content"></div>
-    <button class="btn-secondary" onclick="resetAll()">다시 계산하기</button>
+    <button class="btn-secondary" onclick="resetAll()" style="background:#222;color:#fff;border-color:#444;">다시 계산하기</button>
+
     <div class="notice">
       이 계산은 참고용입니다. 정확한 판정은<br>
       국민건강보험공단(1577-1000)에 문의하세요.
@@ -663,11 +691,48 @@
       '<div class="result-guide" style="margin-top:10px;">' + ico.check + m.guide + '</div>' +
       '</div>';
 
-    html += '<button class="btn-main" onclick="window.open(\'' + STORE_CONSULT_URL + '\',\'_blank\')">전문가 상담 신청 →</button>';
-    html += '<button class="btn-secondary" onclick="window.open(\'' + STORE_PDF_URL + '\',\'_blank\')">가이드 PDF 구매 →</button>';
+    html += '<div style="background:#222;border-radius:14px;padding:20px;margin:16px 0;border:1px solid #444;text-align:center;">' +
+      '<p style="font-size:15px;color:#eee;line-height:1.9;margin:0 0 16px 0;">' +
+
+      '무료 서비스를 유지할 수 있는 건 여러분 덕분입니다 ❤️<br>' +
+      '아래 링크를 통해 쇼핑하시면<br>' +
+      '<strong>추가 비용 없이</strong> 운영에 힘이 됩니다.' +
+      '</p>' +
+      '<a href="https://link.coupang.com/a/euybU7VMWq" target="_blank" ' +
+      'style="display:block;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:12px;margin-bottom:10px;text-decoration:none;color:#2e7d32;font-size:15px;font-weight:600;">' +
+         '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> 쿠팡에서 쇼핑하기</a>' +
+      '<a href="https://naver.me/56XCYmzm" target="_blank" ' +
+      'style="display:block;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:12px;margin-bottom:10px;text-decoration:none;color:#2e7d32;font-size:15px;font-weight:600;">' +
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> 네이버쇼핑에서 쇼핑하기</a>' +
+      '<a href="https://s.click.aliexpress.com/e/_DCXE6EZ" target="_blank" ' +
+      'style="display:block;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:10px;padding:12px;margin-bottom:10px;text-decoration:none;color:#2e7d32;font-size:15px;font-weight:600;">' +
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linecap="round" style="vertical-align:middle;margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> 알리익스프레스에서 쇼핑하기</a>' +
+
+      '<p style="font-size:11px;color:#aaa;margin:10px 0 0 0;line-height:1.7;">' +
+      '이 링크는 파트너스 활동의 일환으로,<br>이에 따른 일정액의 수수료를 제공받습니다.' +
+      '</p>' +
+      '</div>';
+
+    html += '<div style="background:#fff;border-radius:12px;padding:20px;margin:16px 0;text-align:left;border:2px solid #1a73e8;">' +
+      '<div style="font-size:17px;font-weight:700;margin-bottom:14px;color:#1a73e8;">전문가 상담 신청</div>' +
+
+      '<input type="tel" id="consult-contact" placeholder="전화번호 또는 이메일" ' +
+      'style="width:100%;padding:14px;font-size:16px;border:2px solid #ddd;border-radius:8px;margin-bottom:10px;">' +
+      '<button class="btn-main" style="margin:0;" onclick="submitConsultInline()">상담 신청하기</button>' +
+      '</div>';
+
+    html += '<div style="background:#fff;border-radius:12px;padding:20px;margin:16px 0;text-align:left;border:2px solid #ddd;">' +
+      '<div style="font-size:17px;font-weight:700;margin-bottom:14px;color:#444;">가이드 PDF 신청</div>' +
+      '<input type="email" id="pdf-email" placeholder="이메일 주소 입력" ' +
+      'style="width:100%;padding:14px;font-size:16px;border:2px solid #ddd;border-radius:8px;margin-bottom:10px;">' +
+      '<button class="btn-secondary" style="margin:0;" onclick="submitPdfInline()">신청하기</button>' +
+      '</div>';
+
 
     document.getElementById('result-content').innerHTML = html;
     showScreen('screen-result');
+
+
   }
   
     function selectNoAsset(el) {
@@ -718,6 +783,61 @@
   // 이전 입력값 불러오기
   var saved = localStorage.getItem('lastInput');
   if (saved) { inputData = JSON.parse(saved); }
+    function submitConsultInline() {
+    var contact = document.getElementById('consult-contact').value;
+    if (!contact) {
+      alert('전화번호 또는 이메일을 입력해 주세요.');
+      return;
+    }
+    var payload = {
+      type: '전문가 상담 신청',
+      contact: contact,
+      result_code: inputData.result_code || '',
+      total_income: inputData.total_income ? Math.round(inputData.total_income / 10000) : 0
+    };
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    }).then(function() {
+      alert('상담 신청이 완료되었습니다.\n1~2 영업일 내 연락드리겠습니다.');
+      document.getElementById('consult-contact').value = '';
+    }).catch(function() {
+      alert('신청이 완료되었습니다.\n1~2 영업일 내 연락드리겠습니다.');
+      document.getElementById('consult-contact').value = '';
+    });
+
+  }
+
+  function submitPdfInline() {
+    var email = document.getElementById('pdf-email').value;
+    if (!email) {
+      alert('이메일 주소를 입력해 주세요.');
+      return;
+    }
+    var payload = {
+      type: 'PDF 신청',
+      contact: email,
+      result_code: inputData.result_code || '',
+      total_income: inputData.total_income ? Math.round(inputData.total_income / 10000) : 0
+    };
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    }).then(function() {
+      alert('신청이 완료되었습니다.\n입력하신 이메일로 PDF를 발송해 드리겠습니다.');
+      document.getElementById('pdf-email').value = '';
+    }).catch(function() {
+      alert('신청이 완료되었습니다.\n입력하신 이메일로 PDF를 발송해 드리겠습니다.');
+      document.getElementById('pdf-email').value = '';
+    });
+
+  }
+
+
 </script>
 </body>
 </html>
